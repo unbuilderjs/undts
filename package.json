@@ -7,6 +7,15 @@
   "publishConfig": {
     "access": "public"
   },
+  "homepage": "https://github.com/unbuilderjs/undts",
+  "repository": {
+    "type": "git",
+    "url": "git+github.com:unbuilderjs/undts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/unbuilderjs/undts/issues",
+    "email": "zero@naily.cc"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
