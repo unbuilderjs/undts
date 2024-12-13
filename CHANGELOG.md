@@ -1,5 +1,11 @@
 # undts
 
+## 1.1.0
+
+### Minor Changes
+
+- feat: add dynamic-import support
+
 ## 1.0.4
 
 ### Patch Changes

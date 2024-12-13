@@ -1,7 +1,8 @@
-import type { ExportDeclaration, ImportDeclaration, Project, SourceFile } from 'ts-morph'
 import type { SvelteEntryExplorerPluginOptions } from './svelte-plugin'
 import type { VueEntryExplorerPluginOptions } from './vue-plugin'
+import { type CallExpression, type ExportDeclaration, type ImportDeclaration, type Project, type SourceFile, SyntaxKind } from 'ts-morph'
 import { AstroEntryExplorerPlugin } from './astro-plugin'
+import { useDynamicImportExplorer } from './dynamic-import'
 import { useExportDeclarationExplorer } from './export-declaration'
 import { useImportDeclarationExplorer } from './import-declaration'
 import { SvelteEntryExplorerPlugin } from './svelte-plugin'
@@ -16,11 +17,16 @@ export type ExportDeclarationTransformer = (
   exportDeclaration: ExportDeclaration,
   sourceFiles: Set<SourceFile>,
 ) => void | Promise<void>
+export type CallExpressionTransformer = (
+  callExpression: CallExpression,
+  sourceFiles: Set<SourceFile>,
+) => void | Promise<void>
 
 export interface EntryExplorerPlugin {
   transformInclude: (moduleSpecifier: string) => boolean
   transformImportDeclaration?: ImportDeclarationTransformer
   transformExportDeclaration?: ExportDeclarationTransformer
+  transformCallExpression?: CallExpressionTransformer
 }
 
 export interface EntryExplorerOptions {
@@ -56,6 +62,7 @@ export function useEntryExplorer({ plugins = [], vue, svelte, astro }: EntryExpl
 
   const importDeclarationExplorer = useImportDeclarationExplorer({ plugins })
   const exportDeclarationExplorer = useExportDeclarationExplorer({ plugins })
+  const dynamicImportExplorer = useDynamicImportExplorer({ plugins })
 
   async function explore(entries: SourceFile[], project: Project): Promise<Set<SourceFile>> {
     const sourceFilePaths = new Set<SourceFile>(project.getSourceFiles())
@@ -70,6 +77,11 @@ export function useEntryExplorer({ plugins = [], vue, svelte, astro }: EntryExpl
       const exportedExplore = await exportDeclarationExplorer.explore(exportDeclarations)
       sourceFilePaths.add(entry)
       exportedExplore.forEach(sourceFilePath => sourceFilePaths.add(sourceFilePath))
+
+      const dynamicImports = entry.getDescendantsOfKind(SyntaxKind.CallExpression)
+      const dynamicImportExplore = await dynamicImportExplorer.explore(dynamicImports)
+      sourceFilePaths.add(entry)
+      dynamicImportExplore.forEach(sourceFilePath => sourceFilePaths.add(sourceFilePath))
     }
 
     return sourceFilePaths
