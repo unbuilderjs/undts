@@ -1,5 +1,11 @@
 # undts
 
+## 1.1.1
+
+### Patch Changes
+
+- a1ec075: feat: all template's file supporting dynamic imported
+
 ## 1.1.0
 
 ### Minor Changes
