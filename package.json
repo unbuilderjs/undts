@@ -21,6 +21,9 @@
   "bin": {
     "undts": "./dist/cli.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "prepublishOnly": "pnpm build",
