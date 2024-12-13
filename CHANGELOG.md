@@ -1,5 +1,11 @@
 # undts
 
+## 1.0.4
+
+### Patch Changes
+
+- a8e14ae: feat: update package.json
+
 ## 1.0.3
 
 ### Patch Changes
