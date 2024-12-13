@@ -1,0 +1,67 @@
+{
+  "name": "undts",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Unified d.ts files generator, support .vue, .svelte & .astro files!",
+  "author": "Naily Zero <zero@naily.cc> (https://naily.cc)",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./dist/*": "./dist/*"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "undts": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "pnpm build",
+    "dev": "pnpm -F fixture-base build",
+    "lint": "eslint .",
+    "postinstall": "npx simple-git-hooks",
+    "test": "vitest --ui --coverage"
+  },
+  "dependencies": {
+    "@astrojs/compiler": "^2.10.3",
+    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@vue/compiler-sfc": "^3.5.13",
+    "c12": "^2.0.1",
+    "fast-glob": "^3.3.2",
+    "rollup": "^4.28.1",
+    "rollup-plugin-dts": "^6.1.1",
+    "svelte2tsx": "^0.7.30",
+    "ts-morph": "^24.0.0",
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^3.7.3",
+    "@changesets/cli": "^2.27.10",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.7.5",
+    "@vitest/coverage-v8": "2.1.8",
+    "@vitest/ui": "2.1.8",
+    "bumpp": "^9.7.1",
+    "eslint": "^9.12.0",
+    "js-yaml": "^4.1.0",
+    "lint-staged": "^15.2.10",
+    "simple-git-hooks": "^2.11.1",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "vitest": "^2.1.2"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
+  }
+}
