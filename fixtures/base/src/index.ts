@@ -7,3 +7,7 @@ export { default as TestVueComponent } from './test-vue-component.vue'
 export function TestDynamicImport() {
   return import('./dynamic-imported')
 }
+
+export function TestDynamicImportVue() {
+  return import('./dynamic-imported-vue.vue')
+}

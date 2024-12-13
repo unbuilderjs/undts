@@ -1,4 +1,4 @@
-import type { Project, SourceFile } from 'ts-morph'
+import type { Node, Project, SourceFile } from 'ts-morph'
 import type { EntryExplorerPlugin } from './explorer'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -21,26 +21,35 @@ export function SvelteEntryExplorerPlugin({ defaultVersion = 'runes' }: SvelteEn
       const currentSourceFile = declaration.getSourceFile()
       if (!moduleSpecifier || !moduleSpecifier.endsWith('.svelte'))
         return
-
-      const filePath = path.resolve(path.dirname(currentSourceFile.getFilePath()), moduleSpecifier)
-      if (!filePath.endsWith('.svelte') || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile())
-        return
-      transform(sourceFiles, filePath, declaration.getProject())
+      transformer(declaration, sourceFiles, moduleSpecifier, currentSourceFile.getProject(), defaultVersion)
     },
 
     transformImportDeclaration(declaration, sourceFiles) {
       const moduleSpecifier = declaration.getModuleSpecifierValue()
-      const currentSourceFile = declaration.getSourceFile()
-
       if (!moduleSpecifier || !moduleSpecifier.endsWith('.svelte'))
         return
+      transformer(declaration, sourceFiles, moduleSpecifier, declaration.getProject(), defaultVersion)
+    },
 
-      const filePath = path.resolve(path.dirname(currentSourceFile.getFilePath()), moduleSpecifier)
-      if (!filePath.endsWith('.svelte') || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile())
+    transformCallExpression(callExpression, sourceFiles) {
+      const moduleSpecifier = callExpression.getExpression().getText().replace(/['"`]/g, '')
+      if (!moduleSpecifier || !moduleSpecifier.endsWith('.svelte'))
         return
-      transform(sourceFiles, filePath, declaration.getProject(), defaultVersion)
+      transformer(callExpression, sourceFiles, moduleSpecifier, callExpression.getProject(), defaultVersion)
     },
   }
+}
+
+function transformer(node: Node, sourceFiles: Set<SourceFile>, moduleSpecifier: string, project: Project, defaultVersion: SvelteVersion): void {
+  const currentSourceFile = node.getSourceFile()
+
+  if (!moduleSpecifier || !moduleSpecifier.endsWith('.svelte'))
+    return
+
+  const filePath = path.resolve(path.dirname(currentSourceFile.getFilePath()), moduleSpecifier)
+  if (!filePath.endsWith('.svelte') || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile())
+    return
+  transform(sourceFiles, filePath, project, defaultVersion)
 }
 
 function transform(

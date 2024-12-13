@@ -4,4 +4,5 @@ build({
   entry: [
     './src/index.ts',
   ],
+  cleanCache: false,
 })

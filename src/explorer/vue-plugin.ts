@@ -1,4 +1,4 @@
-import type { Project, SourceFile } from 'ts-morph'
+import type { Node, Project, SourceFile } from 'ts-morph'
 import type { EntryExplorerPlugin } from './explorer'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -16,33 +16,35 @@ export function VueEntryExplorerPlugin({ compiler = vueCompiler }: VueEntryExplo
 
     transformExportDeclaration(declaration, sourceFiles) {
       const moduleSpecifier = declaration.getModuleSpecifierValue()
-      const currentSourceFile = declaration.getSourceFile()
-
       if (!moduleSpecifier || !moduleSpecifier.endsWith('.vue'))
         return
-
-      const filePath = path.resolve(path.dirname(currentSourceFile.getFilePath()), moduleSpecifier)
-      if (!filePath.endsWith('.vue') || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile())
-        return
-
-      transform(sourceFiles, filePath, declaration.getProject())
+      transformer(declaration, moduleSpecifier, sourceFiles, compiler)
     },
 
     transformImportDeclaration(declaration, sourceFiles) {
       const moduleSpecifier = declaration.getModuleSpecifierValue()
-      const project = declaration.getProject()
-      const currentSourceFile = declaration.getSourceFile()
+      transformer(declaration, moduleSpecifier, sourceFiles, compiler)
+    },
 
-      if (!moduleSpecifier || !moduleSpecifier.endsWith('.vue'))
-        return
-
-      const filePath = path.resolve(path.dirname(currentSourceFile.getFilePath()), moduleSpecifier)
-      if (!filePath.endsWith('.vue') || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile())
-        return
-
-      transform(sourceFiles, filePath, project, compiler)
+    async transformCallExpression(callExpression, sourceFiles) {
+      const moduleSpecifier = callExpression.getArguments()[0]?.getText().replace(/['"`]/g, '')
+      transformer(callExpression, moduleSpecifier, sourceFiles, compiler)
     },
   }
+}
+
+function transformer(node: Node, moduleSpecifier: string, sourceFiles: Set<SourceFile>, compiler: typeof vueCompiler): void {
+  const project = node.getProject()
+  const currentSourceFile = node.getSourceFile()
+
+  if (!moduleSpecifier || !moduleSpecifier.endsWith('.vue'))
+    return
+
+  const filePath = path.resolve(path.dirname(currentSourceFile.getFilePath()), moduleSpecifier)
+  if (!filePath.endsWith('.vue') || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile())
+    return
+
+  transform(sourceFiles, filePath, project, compiler)
 }
 
 function transform(
