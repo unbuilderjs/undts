@@ -1,6 +1,4 @@
-import type { RollupAliasOptions } from '@rollup/plugin-alias'
 import type { RollupNodeResolveOptions } from '@rollup/plugin-node-resolve'
-import type { RollupOptions } from 'rollup'
 import type { ProjectOptions } from 'ts-morph'
 import type { BundleOptions } from './bundler'
 import type { CleanerOptions } from './cleaner'
@@ -21,7 +19,7 @@ export interface DTSBuildOptions extends EntryExplorerOptions, CleanerOptions, O
    * Entry files. Must be a real file path and cannot be a glob pattern.
    */
   entry?: string[]
-  /** If set `false`, will not bundle all file into `entry` files. */
+  /** If set `false`, will not bundle all file into `entry` files. @deprecated */
   bundled?: false
   /**
    * If you want to include some files, you can use this option.
@@ -34,14 +32,8 @@ export interface DTSBuildOptions extends EntryExplorerOptions, CleanerOptions, O
   include?: string[]
   /** Default exclude `node_modules`. */
   ignore?: string[]
-  /** Base rollup bundler options. */
-  rollupOptions?: RollupOptions
   /** Base typescript compiler options. */
   projectOptions?: ProjectOptions
-  /** Rollup alias options. */
-  alias?: RollupAliasOptions
-  /** Rollup resolve options. */
-  resolve?: ResolveOptions
   /** DTS plugin. */
   plugins?: Plugin[]
 }

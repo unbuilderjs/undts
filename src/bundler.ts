@@ -1,3 +1,4 @@
+import type { InputPluginOption, OutputOptions, RollupOptions } from 'rollup'
 import type { Options } from 'rollup-plugin-dts'
 import type { ResolveOptions } from './types'
 import Alias, { type RollupAliasOptions } from '@rollup/plugin-alias'
@@ -15,10 +16,17 @@ export interface BundleOptions {
   dtsOptions?: Options
   /** Output directory. */
   outDir?: string
+  /** Base rollup options. */
+  rollupOptions?: BaseRollupOptions
 }
 
 export interface BundleService {
   write: () => Promise<void>
+}
+
+export interface BaseRollupOptions extends RollupOptions {
+  plugins?: InputPluginOption[]
+  output?: OutputOptions
 }
 
 export async function useBundler({
@@ -26,22 +34,23 @@ export async function useBundler({
   resolve = {},
   alias = {},
   dtsOptions = {},
+  rollupOptions = {},
   outDir = './dist',
 }: BundleOptions): Promise<BundleService> {
   const bundle = await rollup({
+    ...rollupOptions,
     input: emitted,
-
     plugins: [
+      ...((rollupOptions || {}).plugins || []),
       nodeResolve({
         extensions: resolve.extensions || ['.mjs', '.js', '.json', '.node', '.jsx', '.ts', '.tsx', '.vue', '.svelte'],
       }),
-
       Alias(alias),
-
       dts(dtsOptions),
     ],
 
     output: {
+      ...rollupOptions.output,
       dir: outDir,
       format: 'esm',
     },
