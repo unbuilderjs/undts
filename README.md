@@ -20,7 +20,7 @@ English | [简体中文](./README.zh.md)
 - [x] `.vue` files, using `@vue/compiler-sfc`
 - [x] `.svelte` files, using `svelte2tsx`
 - [x] `.astro` files, using `@astrojs/compiler`
-- [x] `@vue-vine/compiler` files, using `@vue-vine/compiler`
+- [x] `.vine.ts` files, using `@vue-vine/compiler`
 
 All special files can be disabled by options, just set like `vue: false`, `svelte: false`, etc.
 

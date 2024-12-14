@@ -16,11 +16,11 @@
 
 ## 它可以将哪些文件打包为 `d.ts`？
 
-- [x] 普通的 `.ts`，`.tsx` 文件
-- [x] 使用 `@vue/compiler-sfc` 的 `.vue` 文件
-- [x] 使用 `svelte2tsx` 的 `.svelte` 文件
-- [x] 使用 `@astrojs/compiler` 的 `.astro` 文件
-- [x] 使用 `@vue-vine/compiler` 的 `@vue-vine/compiler` 文件
+- [x] 普通的`.ts`，`.tsx`文件，直接由`tsc`转换
+- [x] `.vue`文件，使用 `@vue/compiler-sfc`转换
+- [x] `.svelte`文件，使用 `svelte2tsx`转换
+- [x] `.astro`文件，使用`@astrojs/compiler`转换
+- [x] `.vine.ts`文件，使用`@vue-vine/compiler`转换
 
 所有特殊文件都可以通过选项快速禁用，只需设置为 `vue: false`，`svelte: false` 就行。
 
