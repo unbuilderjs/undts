@@ -1,5 +1,11 @@
 # undts
 
+## 1.3.0
+
+### Minor Changes
+
+- 2c5ff74: fix: rollupOptions not use
+
 ## 1.2.0
 
 ### Minor Changes
