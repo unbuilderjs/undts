@@ -6,13 +6,15 @@
 
 Crazy d.ts files generator💥Supports multiple template languages!
 
+English | [简体中文](./README.zh.md)
+
 ![npm](https://img.shields.io/npm/v/undts)
 ![commit-activity](https://img.shields.io/github/commit-activity/m/unbuilderjs/undts)
 ![last-commit](https://img.shields.io/github/last-commit/unbuilderjs/undts)
 
 </div>
 
-## What files can it bundle to become d.ts?
+## What files can it bundle to become `d.ts`?
 
 - [x] Normal `.ts`, `.tsx` files
 - [x] `.vue` files, using `@vue/compiler-sfc`
