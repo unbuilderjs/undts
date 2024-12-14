@@ -43,7 +43,8 @@ export async function useBundler({
     plugins: [
       ...((rollupOptions || {}).plugins || []),
       nodeResolve({
-        extensions: resolve.extensions || ['.mjs', '.js', '.json', '.node', '.jsx', '.ts', '.tsx', '.vue', '.svelte'],
+        extensions: ['.mjs', '.js', '.json', '.node', '.jsx', '.ts', '.tsx', '.vue', '.svelte'],
+        ...(resolve || {}),
       }),
       Alias(alias),
       dts(dtsOptions),
