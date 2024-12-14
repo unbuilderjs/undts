@@ -4,13 +4,25 @@
 
 # undts
 
-Crazy d.ts files generator, supports `.vue`、`.svelte` and `.astro` files!
+Crazy d.ts files generator💥Supports multiple template languages!
 
 ![npm](https://img.shields.io/npm/v/undts)
 ![commit-activity](https://img.shields.io/github/commit-activity/m/unbuilderjs/undts)
 ![last-commit](https://img.shields.io/github/last-commit/unbuilderjs/undts)
 
 </div>
+
+## What files can it bundle to become d.ts?
+
+- [x] Normal `.ts`, `.tsx` files
+- [x] `.vue` files, using `@vue/compiler-sfc`
+- [x] `.svelte` files, using `svelte2tsx`
+- [x] `.astro` files, using `@astrojs/compiler`
+- [x] `@vue-vine/compiler` files, using `@vue-vine/compiler`
+
+All special files can be disabled by options, just set like `vue: false`, `svelte: false`, etc.
+
+> I will keep the configuration as simple as possible, just like tsup ⚡️
 
 ## Quick Start
 

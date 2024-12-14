@@ -1,3 +1,5 @@
+/// <reference types="vue-vine/macros" />
+
 declare module '*.svelte' {
   const component: any
   export default component

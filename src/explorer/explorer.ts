@@ -6,6 +6,7 @@ import { useDynamicImportExplorer } from './dynamic-import'
 import { useExportDeclarationExplorer } from './export-declaration'
 import { useImportDeclarationExplorer } from './import-declaration'
 import { SvelteEntryExplorerPlugin } from './svelte-plugin'
+import { VineEntryExplorerPlugin, type VineEntryExplorerPluginOptions } from './vine-plugin'
 import { VueEntryExplorerPlugin } from './vue-plugin'
 
 export type TransformType = 'ImportDeclaration' | 'ExportDeclaration'
@@ -27,6 +28,7 @@ export interface EntryExplorerPlugin {
   transformImportDeclaration?: ImportDeclarationTransformer
   transformExportDeclaration?: ExportDeclarationTransformer
   transformCallExpression?: CallExpressionTransformer
+  transformSourceFile?: (sourceFile: SourceFile) => void | Promise<void>
 }
 
 export interface EntryExplorerOptions {
@@ -36,6 +38,7 @@ export interface EntryExplorerOptions {
   /** If set `false`, will disable the svelte. */
   svelte?: false | SvelteEntryExplorerPluginOptions
   astro?: false
+  vine?: false | VineEntryExplorerPluginOptions
 }
 
 export interface EntryExplorerService {
@@ -52,7 +55,9 @@ export interface EntryExplorerService {
 }
 
 export function useEntryExplorer(entryExplorerOptions?: EntryExplorerOptions): EntryExplorerService
-export function useEntryExplorer({ plugins = [], vue, svelte, astro }: EntryExplorerOptions = {}): EntryExplorerService {
+export function useEntryExplorer({ plugins = [], vue, svelte, astro, vine }: EntryExplorerOptions = {}): EntryExplorerService {
+  if (vine !== false)
+    plugins.push(VineEntryExplorerPlugin(vine))
   if (vue !== false)
     plugins.push(VueEntryExplorerPlugin(vue))
   if (svelte !== false)
@@ -82,6 +87,13 @@ export function useEntryExplorer({ plugins = [], vue, svelte, astro }: EntryExpl
       const dynamicImportExplore = await dynamicImportExplorer.explore(dynamicImports)
       sourceFilePaths.add(entry)
       dynamicImportExplore.forEach(sourceFilePath => sourceFilePaths.add(sourceFilePath))
+    }
+
+    for (const plugin of plugins) {
+      for (const sourceFile of sourceFilePaths) {
+        if (plugin.transformInclude(sourceFile.getFilePath()) && plugin.transformSourceFile)
+          await plugin.transformSourceFile(sourceFile)
+      }
     }
 
     return sourceFilePaths

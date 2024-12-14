@@ -2,7 +2,7 @@
   "name": "undts",
   "type": "module",
   "version": "1.1.1",
-  "description": "Unified d.ts files generator, support .vue, .svelte & .astro files!",
+  "description": "Unified d.ts files generator, support .vue, .svelte, .astro and more files!",
   "author": "Naily Zero <zero@naily.cc> (https://naily.cc)",
   "publishConfig": {
     "access": "public"
@@ -35,7 +35,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "prepublishOnly": "pnpm build",
+    "prepublishOnly": "tsup",
     "dev": "pnpm -F fixture-base build",
     "lint": "eslint .",
     "postinstall": "npx simple-git-hooks",
@@ -45,6 +45,7 @@
     "@astrojs/compiler": "^2.10.3",
     "@rollup/plugin-alias": "^5.1.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
+    "@vue-vine/compiler": "^0.1.41",
     "@vue/compiler-sfc": "^3.5.13",
     "c12": "^2.0.1",
     "fast-glob": "^3.3.2",
