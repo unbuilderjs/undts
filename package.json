@@ -1,7 +1,7 @@
 {
   "name": "undts",
   "type": "module",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Unified d.ts files generator, support .vue, .svelte, .astro and more files!",
   "author": "Naily Zero <zero@naily.cc> (https://naily.cc)",
   "publishConfig": {

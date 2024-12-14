@@ -1,5 +1,18 @@
 # undts
 
+## 1.2.0
+
+### Minor Changes
+
+- 86e89ec: feat: add vue-vine support
+
+### Patch Changes
+
+- 1c6a1e3: feat: update readme
+- 7125383: feat: update readme
+- df995aa: feat: update readme
+- 4703050: feat: update readme
+
 ## 1.1.1
 
 ### Patch Changes
