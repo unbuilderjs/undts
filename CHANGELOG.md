@@ -1,5 +1,12 @@
 # undts
 
+## 1.3.1
+
+### Patch Changes
+
+- 39acea6: fix: resolve options
+- 43b5447: feat: release
+
 ## 1.3.0
 
 ### Minor Changes
