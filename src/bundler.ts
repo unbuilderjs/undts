@@ -49,12 +49,24 @@ export async function useBundler({
       }),
       Alias(alias),
       dts(dtsOptions),
+      {
+        name: 'rename-output-files',
+        generateBundle(options, bundle) {
+          for (const [fileName, fileInfo] of Object.entries(bundle)) {
+            if (fileName.endsWith('.d.d.ts')) {
+              const newFileName = fileName.replace('.d.d.ts', '.d.ts')
+              fileInfo.fileName = newFileName
+            }
+          }
+        },
+      },
     ],
 
     output: {
       ...rollupOptions.output,
       dir: outDir,
       format: 'esm',
+      entryFileNames: '[name].ts',
     },
   })
 

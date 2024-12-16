@@ -6,7 +6,9 @@ export interface EmitService {
   emit: (sourceFiles: SourceFile[]) => Promise<string[]>
 }
 
-export function useEmit(): EmitService {
+export function useEmit(entrySourceFileInstances: SourceFile[]): EmitService {
+  const entryFilePaths = entrySourceFileInstances.map(entrySourceFile => entrySourceFile.getFilePath())
+
   return {
     async emit(projectSourceFiles): Promise<string[]> {
       const entryOutputFilePaths: string[] = []
@@ -16,12 +18,12 @@ export function useEmit(): EmitService {
         const outputFiles = projectSourceFile.getEmitOutput().getOutputFiles()
 
         await Promise.all(outputFiles.map(async (outputFile) => {
-          const originalFilepath = outputFile.getFilePath()
-          const replacedFilePath = originalFilepath.replace(/\.d\.ts$/, '.ts') as ReturnType<typeof outputFile.getFilePath>
-          if (originalFilepath.endsWith('.d.ts'))
-            entryOutputFilePaths.push(replacedFilePath)
-          await fs.promises.mkdir(path.dirname(replacedFilePath), { recursive: true })
-          await fs.promises.writeFile(replacedFilePath, outputFile.getText(), 'utf-8')
+          const outputPath = outputFile.getFilePath()
+          if (entryFilePaths.includes(projectSourceFile.getFilePath()))
+            entryOutputFilePaths.push(outputPath)
+
+          await fs.promises.mkdir(path.dirname(outputPath), { recursive: true })
+          await fs.promises.writeFile(outputPath, outputFile.getText(), 'utf-8')
         }))
       }))
 

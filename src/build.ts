@@ -50,8 +50,10 @@ export async function build({
   const exploredSourceFiles = await explorer.explore(entrySourceFileInstances, project)
 
   cleaner.clean()
-  await Promise.all([...exploredSourceFiles].map(file => file.emit()))
-  const emitted = await useEmit().emit([...new Set(entrySourceFileInstances.concat(project.getSourceFiles()))])
+  const emitted = await useEmit(entrySourceFileInstances).emit(Array.from(new Set(entrySourceFileInstances
+    .concat(project.getSourceFiles())
+    .concat(Array.from(exploredSourceFiles)),
+  )))
 
   if (bundled === false)
     return undefined
