@@ -51,7 +51,7 @@ export async function build({
 
   cleaner.clean()
   await Promise.all([...exploredSourceFiles].map(file => file.emit()))
-  const emitted = await useEmit().emit(entrySourceFileInstances)
+  const emitted = await useEmit().emit([...new Set(entrySourceFileInstances.concat(project.getSourceFiles()))])
 
   if (bundled === false)
     return undefined

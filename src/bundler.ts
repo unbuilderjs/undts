@@ -40,6 +40,7 @@ export async function useBundler({
   const bundle = await rollup({
     ...rollupOptions,
     input: emitted,
+
     plugins: [
       ...((rollupOptions || {}).plugins || []),
       nodeResolve({
