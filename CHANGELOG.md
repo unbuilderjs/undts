@@ -1,5 +1,11 @@
 # undts
 
+## 1.3.2
+
+### Patch Changes
+
+- 884b060: feat: emit
+
 ## 1.3.1
 
 ### Patch Changes
