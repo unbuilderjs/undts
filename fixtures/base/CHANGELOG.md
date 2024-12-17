@@ -1,5 +1,12 @@
 # fixture-base
 
+## 0.0.15
+
+### Patch Changes
+
+- Updated dependencies [33b11ca]
+  - undts@1.3.7
+
 ## 0.0.14
 
 ### Patch Changes
