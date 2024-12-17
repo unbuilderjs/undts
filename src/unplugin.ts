@@ -26,13 +26,15 @@ function getEsbuildInput(entryPoints?: string[] | Record<string, string> | { in:
   return typeof entryPoints === 'object' ? Object.values(entryPoints) : undefined
 }
 
-export const unplugin: UnpluginFactory<DTSBuildOptions> = (dtsOptions = {}) => {
+export const unplugin: UnpluginFactory<DTSBuildOptions> = (dtsOptions = {}, meta) => {
   let entries: string[] | undefined = []
 
   return {
     name: 'unplugin-undts',
 
     buildEnd() {
+      if (!entries || !entries.length)
+        console.warn(`[unplugin-undts] No ${meta.framework} entry found, please specify the entry in the plugin config 'entry' field.`)
       build({
         entry: dtsOptions.entry || entries,
         ...dtsOptions,
