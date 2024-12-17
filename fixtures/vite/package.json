@@ -1,0 +1,12 @@
+{
+  "name": "fixture-vite",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "undts": "workspace:*",
+    "vite": "^6.0.3"
+  }
+}

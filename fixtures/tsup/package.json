@@ -1,0 +1,12 @@
+{
+  "name": "fixture-tsup",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "undts": "workspace:*",
+    "vite": "^6.0.3"
+  }
+}
