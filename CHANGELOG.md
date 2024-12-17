@@ -1,5 +1,11 @@
 # undts
 
+## 1.3.9
+
+### Patch Changes
+
+- 5dd9d57: fix: build time move to buildEnd hook
+
 ## 1.3.8
 
 ### Patch Changes
