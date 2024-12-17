@@ -1,5 +1,11 @@
 # undts
 
+## 1.3.10
+
+### Patch Changes
+
+- 428c556: feat: add warn log
+
 ## 1.3.9
 
 ### Patch Changes
