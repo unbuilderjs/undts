@@ -35,6 +35,8 @@ export function useDynamicImportExplorer({ plugins = [] }: EntryExplorerOptions 
     }
 
     for (const plugin of plugins) {
+      if (!plugin.transformInclude)
+        continue
       const willTransform = plugin.transformInclude(moduleSpecifierValue)
       if (!willTransform)
         continue

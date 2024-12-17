@@ -1,13 +1,31 @@
 import type { SourceFile } from 'ts-morph'
+import type { DTSBuildOptions } from './types'
 import fs from 'node:fs'
 import path from 'node:path'
-import { cwd } from 'node:process'
+
+export type OutputFilePath = string
+export type OutputFileText = string
+
+export interface EmitWriteBundleContext {
+  getProjectSourceFiles: () => SourceFile[]
+  getCurrentOptions: () => DTSBuildOptions
+  setCurrentOptions: (options: DTSBuildOptions) => void
+}
+
+export interface EmitPlugin {
+  writeCacheBundle?: (
+    this: EmitWriteBundleContext,
+    sourceFile: SourceFile,
+    outputFilePath: OutputFilePath,
+    outputFileText: OutputFileText,
+  ) => Promise<void> | void | [OutputFilePath, OutputFileText] | Promise<[OutputFilePath, OutputFileText]>
+}
 
 export interface EmitService {
   emit: (sourceFiles: SourceFile[]) => Promise<string[]>
 }
 
-export function useEmit(entrySourceFileInstances: SourceFile[], regionComment?: false): EmitService {
+export function useEmit(entrySourceFileInstances: SourceFile[], options: DTSBuildOptions): EmitService {
   const entryFilePaths = entrySourceFileInstances.map(entrySourceFile => entrySourceFile.getFilePath())
 
   return {
@@ -19,14 +37,27 @@ export function useEmit(entrySourceFileInstances: SourceFile[], regionComment?: 
         const outputFiles = projectSourceFile.getEmitOutput().getOutputFiles()
 
         await Promise.all(outputFiles.map(async (outputFile) => {
-          const outputPath = outputFile.getFilePath()
+          let outputPath: string = outputFile.getFilePath()
+          let outputText = outputFile.getText()
+
           if (entryFilePaths.includes(projectSourceFile.getFilePath()))
             entryOutputFilePaths.push(outputPath)
-
           await fs.promises.mkdir(path.dirname(outputPath), { recursive: true })
-          let outputText = outputFile.getText()
-          if (regionComment !== false)
-            outputText = `// #region ${path.relative(cwd(), projectSourceFile.getFilePath())}\n${outputText}\n// #endregion\n`
+
+          // Run emit plugin
+          for (const plugin of options.plugins || []) {
+            if (plugin.writeCacheBundle) {
+              const result = await plugin.writeCacheBundle.call({
+                getProjectSourceFiles: () => projectSourceFiles,
+                getCurrentOptions: () => options,
+                setCurrentOptions: newOptions => options = newOptions,
+              }, projectSourceFile, outputPath, outputText)
+              if (result) {
+                outputPath = result[0]
+                outputText = result[1]
+              }
+            }
+          }
           await fs.promises.writeFile(outputPath, outputText, 'utf-8')
         }))
       }))

@@ -20,6 +20,8 @@ export function useExportDeclarationExplorer({ plugins = [] }: EntryExplorerOpti
       const moduleSpecifierValue = exportDeclaration.getModuleSpecifierValue()
       if (!moduleSpecifierValue)
         continue
+      if (!plugin.transformInclude)
+        continue
       const willTransform = plugin.transformInclude(moduleSpecifierValue)
       if (!willTransform)
         continue

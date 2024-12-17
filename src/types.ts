@@ -1,7 +1,9 @@
 import type { RollupNodeResolveOptions } from '@rollup/plugin-node-resolve'
+import type { Plugin as RollupPlugin } from 'rollup'
 import type { ProjectOptions } from 'ts-morph'
 import type { BundleOptions } from './bundler'
 import type { CleanerOptions } from './cleaner'
+import type { EmitPlugin } from './emit'
 import type { EntryExplorerOptions, EntryExplorerPlugin } from './explorer'
 
 export interface ResolveOptions extends RollupNodeResolveOptions {
@@ -12,7 +14,9 @@ export interface ResolveOptions extends RollupNodeResolveOptions {
   extensions?: readonly string[]
 }
 
-export interface Plugin extends EntryExplorerPlugin {}
+export interface Plugin extends EntryExplorerPlugin, EmitPlugin, RollupPlugin {
+  dtsConfig?: (options: DTSBuildOptions) => void | Promise<void> | DTSBuildOptions | Promise<DTSBuildOptions>
+}
 
 export interface DTSBuildOptions extends EntryExplorerOptions, CleanerOptions, Omit<BundleOptions, 'emitted'> {
   /**
@@ -34,7 +38,9 @@ export interface DTSBuildOptions extends EntryExplorerOptions, CleanerOptions, O
   ignore?: string[]
   /** Base typescript compiler options. */
   projectOptions?: ProjectOptions
-  /** DTS plugin. */
+  /**
+   * The plugins of undts. It is extended from `rollup` plugin and add some custom hooks.
+   */
   plugins?: Plugin[]
   /** Add `#region` and `#endregion` comment in output file. Default is `true`. */
   regionComment?: false

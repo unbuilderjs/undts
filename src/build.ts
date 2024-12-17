@@ -6,19 +6,33 @@ import { useBundler } from './bundler'
 import { useCleaner } from './cleaner'
 import { useEmit } from './emit'
 import { useEntryExplorer } from './explorer'
+import { RegionPlugin } from './region-plugin'
 
-export async function build(options?: DTSBuildOptions): Promise<void>
-export async function build({
-  entry = [],
-  include = [],
-  ignore = [],
-  projectOptions,
-  cacheDir = './[outDir]/.cache',
-  outDir = './dist',
-  bundled,
-  regionComment,
-  ...extraOptions
-}: DTSBuildOptions = {}): Promise<void> {
+export async function build(options: DTSBuildOptions = {}): Promise<void> {
+  options.plugins = options.plugins || []
+  options.plugins.push(RegionPlugin(options.regionComment))
+
+  // Run config hook
+  for (const plugin of options.plugins || []) {
+    if (plugin.dtsConfig) {
+      const result = await plugin.dtsConfig(options)
+      if (result)
+        options = result
+    }
+  }
+
+  let {
+    entry = [],
+    include = [],
+    ignore = [],
+    projectOptions,
+    cacheDir = './[outDir]/.cache',
+    outDir = './dist',
+    bundled,
+    regionComment,
+    ...extraOptions
+  } = options
+
   cacheDir = cacheDir.replace(/\[outDir\]/g, outDir)
 
   const project = new Project({
@@ -52,7 +66,7 @@ export async function build({
   const exploredSourceFiles = await explorer.explore(entrySourceFileInstances, project)
 
   cleaner.clean()
-  const emitted = await useEmit(entrySourceFileInstances, regionComment)
+  const emitted = await useEmit(entrySourceFileInstances, options)
     .emit(Array.from(new Set(entrySourceFileInstances
       .concat(project.getSourceFiles())
       .concat(Array.from(exploredSourceFiles)),

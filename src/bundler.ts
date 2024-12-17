@@ -1,6 +1,6 @@
 import type { InputPluginOption, OutputOptions, RollupOptions } from 'rollup'
 import type { Options } from 'rollup-plugin-dts'
-import type { ResolveOptions } from './types'
+import type { Plugin, ResolveOptions } from './types'
 import Alias, { type RollupAliasOptions } from '@rollup/plugin-alias'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import { rollup } from 'rollup'
@@ -18,6 +18,8 @@ export interface BundleOptions {
   outDir?: string
   /** Base rollup options. */
   rollupOptions?: BaseRollupOptions
+  /** undts plugins also extend from `rollup` plugin. */
+  plugins?: Plugin[]
 }
 
 export interface BundleService {
@@ -36,6 +38,7 @@ export async function useBundler({
   dtsOptions = {},
   rollupOptions = {},
   outDir = './dist',
+  plugins = [],
 }: BundleOptions): Promise<BundleService> {
   const bundle = await rollup({
     ...rollupOptions,
@@ -43,6 +46,7 @@ export async function useBundler({
 
     plugins: [
       ...((rollupOptions || {}).plugins || []),
+      ...plugins,
       nodeResolve({
         extensions: ['.mjs', '.js', '.json', '.node', '.jsx', '.ts', '.tsx', '.vue', '.svelte'],
         ...(resolve || {}),

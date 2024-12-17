@@ -17,6 +17,8 @@ export function useImportDeclarationExplorer({ plugins = [] }: EntryExplorerOpti
     }
 
     for (const plugin of plugins) {
+      if (!plugin.transformInclude)
+        continue
       const willTransform = plugin.transformInclude(importDeclaration.getModuleSpecifierValue())
       if (!willTransform)
         continue
