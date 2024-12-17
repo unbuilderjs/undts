@@ -1,9 +1,11 @@
-import { undts } from 'undts'
+import vue from '@vitejs/plugin-vue'
+import undts from 'undts/vite'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [
-    undts.vite({}),
+    vue(),
+    undts({}),
   ],
 
   build: {

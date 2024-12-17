@@ -27,16 +27,21 @@ function getEsbuildInput(entryPoints?: string[] | Record<string, string> | { in:
 }
 
 export const unplugin: UnpluginFactory<DTSBuildOptions> = (dtsOptions = {}) => {
+  let entries: string[] | undefined = []
+
   return {
     name: 'unplugin-undts',
 
+    buildEnd() {
+      build({
+        entry: dtsOptions.entry || entries,
+        ...dtsOptions,
+      })
+    },
+
     esbuild: {
       config(options) {
-        const entries = getEsbuildInput(options.entryPoints)
-        build({
-          entry: dtsOptions.entry || entries,
-          ...dtsOptions,
-        })
+        entries = getEsbuildInput(options.entryPoints)
       },
     },
 
@@ -47,22 +52,13 @@ export const unplugin: UnpluginFactory<DTSBuildOptions> = (dtsOptions = {}) => {
           ? config.build.lib.entry
           : undefined
         const viteSSREntry = typeof config.build?.ssr === 'string' ? config.build.ssr : undefined
-        const entries = getInput(rollupEntry || viteEntry || viteSSREntry)
-        build({
-          entry: entries,
-          cacheDir: '../.undts',
-          ...dtsOptions,
-        })
+        entries = getInput(rollupEntry || viteEntry || viteSSREntry)
       },
     },
 
     rollup: {
       options(options) {
-        const entries = getInput(options.input)
-        build({
-          entry: dtsOptions.entry || entries,
-          ...dtsOptions,
-        })
+        entries = getInput(options.input)
       },
     },
   }

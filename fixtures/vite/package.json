@@ -6,6 +6,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
     "undts": "workspace:*",
     "vite": "^6.0.3"
   }
