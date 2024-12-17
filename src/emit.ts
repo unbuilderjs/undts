@@ -1,12 +1,13 @@
 import type { SourceFile } from 'ts-morph'
 import fs from 'node:fs'
 import path from 'node:path'
+import { cwd } from 'node:process'
 
 export interface EmitService {
   emit: (sourceFiles: SourceFile[]) => Promise<string[]>
 }
 
-export function useEmit(entrySourceFileInstances: SourceFile[]): EmitService {
+export function useEmit(entrySourceFileInstances: SourceFile[], regionComment?: false): EmitService {
   const entryFilePaths = entrySourceFileInstances.map(entrySourceFile => entrySourceFile.getFilePath())
 
   return {
@@ -23,7 +24,10 @@ export function useEmit(entrySourceFileInstances: SourceFile[]): EmitService {
             entryOutputFilePaths.push(outputPath)
 
           await fs.promises.mkdir(path.dirname(outputPath), { recursive: true })
-          await fs.promises.writeFile(outputPath, outputFile.getText(), 'utf-8')
+          let outputText = outputFile.getText()
+          if (regionComment !== false)
+            outputText = `// #region ${path.relative(cwd(), projectSourceFile.getFilePath())}\n${outputText}\n// #endregion\n`
+          await fs.promises.writeFile(outputPath, outputText, 'utf-8')
         }))
       }))
 

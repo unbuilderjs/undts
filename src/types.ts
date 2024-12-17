@@ -36,6 +36,8 @@ export interface DTSBuildOptions extends EntryExplorerOptions, CleanerOptions, O
   projectOptions?: ProjectOptions
   /** DTS plugin. */
   plugins?: Plugin[]
+  /** Add `#region` and `#endregion` comment in output file. Default is `true`. */
+  regionComment?: false
 }
 
 export function defineConfig(options: DTSBuildOptions | DTSBuildOptions[] = {}): DTSBuildOptions | DTSBuildOptions[] {

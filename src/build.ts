@@ -16,6 +16,7 @@ export async function build({
   cacheDir = './[outDir]/.cache',
   outDir = './dist',
   bundled,
+  regionComment,
   ...extraOptions
 }: DTSBuildOptions = {}): Promise<void> {
   cacheDir = cacheDir.replace(/\[outDir\]/g, outDir)
@@ -34,6 +35,7 @@ export async function build({
       skipLibCheck: true,
       allowJs: true,
       outDir: bundled === false ? outDir : cacheDir,
+      removeComments: false,
     },
   })
 
@@ -50,10 +52,11 @@ export async function build({
   const exploredSourceFiles = await explorer.explore(entrySourceFileInstances, project)
 
   cleaner.clean()
-  const emitted = await useEmit(entrySourceFileInstances).emit(Array.from(new Set(entrySourceFileInstances
-    .concat(project.getSourceFiles())
-    .concat(Array.from(exploredSourceFiles)),
-  )))
+  const emitted = await useEmit(entrySourceFileInstances, regionComment)
+    .emit(Array.from(new Set(entrySourceFileInstances
+      .concat(project.getSourceFiles())
+      .concat(Array.from(exploredSourceFiles)),
+    )))
 
   if (bundled === false)
     return undefined
