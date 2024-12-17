@@ -1,5 +1,12 @@
 # fixture-base
 
+## 0.0.12
+
+### Patch Changes
+
+- Updated dependencies [db7dca2]
+  - undts@1.3.4
+
 ## 0.0.11
 
 ### Patch Changes

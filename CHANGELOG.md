@@ -1,5 +1,11 @@
 # undts
 
+## 1.3.4
+
+### Patch Changes
+
+- db7dca2: feat: extended plugin option from rollup, add dtsConfig hook and writeCacheBundle hook, update readme
+
 ## 1.3.3
 
 ### Patch Changes
