@@ -62,6 +62,78 @@ build({
 })
 ```
 
+## Using with frameworks
+
+Thanks to the powerful `unplugin`, undts can be used in combination with `vite`/`rollup`/`esbuild` with zero configuration, it will automatically using the `vite`/`rollup`/`esbuild` configuration file's `entry`/`input` option as the `entry` option of `undts`.
+
+<details>
+<summary>Using with Vite Lib mode</summary>
+
+```ts
+// vite.config.ts
+import undts from 'undts/vite'
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  build: {
+    lib: {
+      // undts will automatically use this entry, you don't need to set it again in plugin options
+      entry: 'src/index.ts',
+    },
+  },
+
+  plugins: [
+    undts()
+  ],
+})
+```
+</details>
+<details>
+<summary>Using with Rollup + SWC</summary>
+
+```js
+// rollup.config.mjs
+import swc from '@rollup/plugin-swc'
+import { defineConfig } from 'rollup'
+import undts from 'undts/rollup'
+
+export default defineConfig({
+  input: 'src/index.ts',
+  output: {
+    dir: 'dist',
+    format: 'es',
+  },
+
+  plugins: [
+    swc(),
+    // It will automatically use input option as the entry option of undts
+    undts(),
+  ],
+})
+```
+
+</details>
+<details>
+<summary>Using with tsup（it powered by esbuild）</summary>
+
+```ts
+// tsup.config.ts
+import { defineConfig } from 'tsup'
+import undts from 'undts/esbuild'
+
+export default defineConfig({
+  entry: ['src/index.ts'],
+  // Disable tsup's default dts generation, use undts instead
+  dts: false,
+  sourcemap: true,
+  plugins: [
+    // It will automatically use entry option as the entry option of undts
+    undts(),
+  ],
+})
+```
+</details>
+
 ## Plugin
 
 `undts`'s plugin system is extended from `rollup` and added some new hooks, you can use it to customize the behavior of `undts`.
