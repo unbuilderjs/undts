@@ -5,6 +5,7 @@ import { AstroEntryExplorerPlugin } from './astro-plugin'
 import { useDynamicImportExplorer } from './dynamic-import'
 import { useExportDeclarationExplorer } from './export-declaration'
 import { useImportDeclarationExplorer } from './import-declaration'
+import { SkipCSSPlugin } from './skip-css-plugin'
 import { SvelteEntryExplorerPlugin } from './svelte-plugin'
 import { VineEntryExplorerPlugin, type VineEntryExplorerPluginOptions } from './vine-plugin'
 import { VueEntryExplorerPlugin } from './vue-plugin'
@@ -36,6 +37,7 @@ export interface EntryExplorerOptions {
   svelte?: false | SvelteEntryExplorerPluginOptions
   astro?: false
   vine?: false | VineEntryExplorerPluginOptions
+  css?: 'skip' | false
 }
 
 export interface EntryExplorerService {
@@ -52,7 +54,7 @@ export interface EntryExplorerService {
 }
 
 export function useEntryExplorer(entryExplorerOptions?: EntryExplorerOptions): EntryExplorerService
-export function useEntryExplorer({ plugins = [], vue, svelte, astro, vine }: EntryExplorerOptions = {}): EntryExplorerService {
+export function useEntryExplorer({ plugins = [], vue, svelte, astro, vine, css }: EntryExplorerOptions = {}): EntryExplorerService {
   if (vine !== false)
     plugins.push(VineEntryExplorerPlugin(vine))
   if (vue !== false)
@@ -61,6 +63,8 @@ export function useEntryExplorer({ plugins = [], vue, svelte, astro, vine }: Ent
     plugins.push(SvelteEntryExplorerPlugin(svelte))
   if (astro !== false)
     plugins.push(AstroEntryExplorerPlugin())
+  if (css !== false)
+    plugins.push(SkipCSSPlugin(!css ? false : (css === 'skip')))
 
   const importDeclarationExplorer = useImportDeclarationExplorer({ plugins })
   const exportDeclarationExplorer = useExportDeclarationExplorer({ plugins })
