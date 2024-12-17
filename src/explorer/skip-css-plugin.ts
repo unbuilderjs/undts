@@ -5,6 +5,13 @@ export function SkipCSSPlugin(enable: boolean = true): EntryExplorerPlugin {
   return {
     transformInclude(moduleSpecifier) {
       return moduleSpecifier.endsWith('.css')
+        || moduleSpecifier.endsWith('.scss')
+        || moduleSpecifier.endsWith('.sass')
+        || moduleSpecifier.endsWith('.less')
+        || moduleSpecifier.endsWith('.styl')
+        || moduleSpecifier.endsWith('.stylus')
+        || moduleSpecifier.endsWith('.pcss')
+        || moduleSpecifier.endsWith('.postcss')
     },
 
     transformImportDeclaration(importDeclaration, sourceFiles) {
