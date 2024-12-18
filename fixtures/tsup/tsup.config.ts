@@ -1,5 +1,7 @@
 import { defineConfig } from 'tsup'
 import { undts } from 'undts/esbuild'
+import unocss from 'unocss/postcss'
+import vue from 'unplugin-vue/esbuild'
 
 export default defineConfig({
   entry: {
@@ -9,5 +11,16 @@ export default defineConfig({
   dts: false,
   clean: true,
   sourcemap: true,
-  esbuildPlugins: [undts({})],
+  esbuildPlugins: [
+    undts(),
+
+    vue({
+      style: {
+        // eslint-disable-next-line ts/ban-ts-comment
+        // @ts-expect-error
+        preprocessLang: 'less',
+        postcssPlugins: [unocss()],
+      },
+    }),
+  ],
 })

@@ -3,5 +3,13 @@ defineProps<{ msg: string }>()
 </script>
 
 <template>
-  <div>Hello world, {{ msg }}</div>
+  <div flex="~">
+    Hello world, {{ msg }}
+  </div>
 </template>
+
+<style lang="less" scoped>
+div {
+  color: red;
+}
+</style>

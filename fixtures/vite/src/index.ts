@@ -1,3 +1,3 @@
-export default 'Hello, world!'
+import 'uno.css'
 
 export { default as Test } from './test.vue'

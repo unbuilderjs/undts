@@ -1,5 +1,4 @@
 import { defineConfig } from 'tsup'
-import { undts } from './src/esbuild'
 
 export default defineConfig({
   entry: {
@@ -10,8 +9,7 @@ export default defineConfig({
     esbuild: './src/esbuild.ts',
   },
   format: ['cjs', 'esm'],
-  dts: false,
+  dts: true,
   clean: true,
   sourcemap: true,
-  plugins: [undts()],
 })

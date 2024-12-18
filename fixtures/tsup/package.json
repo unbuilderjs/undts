@@ -6,7 +6,11 @@
     "build": "tsup"
   },
   "dependencies": {
+    "@chialab/esbuild-plugin-lightningcss": "^0.18.0",
+    "less": "^4.2.1",
     "undts": "workspace:*",
+    "unocss": "0.65.1",
+    "unplugin-vue": "^5.2.1",
     "vite": "^6.0.3"
   }
 }

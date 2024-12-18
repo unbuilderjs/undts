@@ -67,7 +67,7 @@ build({
 Thanks to the powerful `unplugin`, undts can be used in combination with `vite`/`rollup`/`esbuild` with zero configuration, it will automatically using the `vite`/`rollup`/`esbuild` configuration file's `entry`/`input` option as the `entry` option of `undts`.
 
 <details>
-<summary>Using with Vite Lib mode</summary>
+<summary>Using with Vite Lib mode（Recommended）</summary>
 
 ```ts
 // vite.config.ts
@@ -126,7 +126,7 @@ export default defineConfig({
   // Disable tsup's default dts generation, use undts instead
   dts: false,
   sourcemap: true,
-  plugins: [
+  esbuildPlugins: [
     // It will automatically use entry option as the entry option of undts
     undts(),
   ],
