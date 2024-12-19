@@ -1,5 +1,11 @@
 # undts
 
+## 1.3.12
+
+### Patch Changes
+
+- 9da29fd: fix: declaration
+
 ## 1.3.11
 
 ### Patch Changes
