@@ -54,7 +54,10 @@
     "dev": "pnpm -F fixture-base build",
     "lint": "eslint .",
     "postinstall": "npx simple-git-hooks",
-    "test": "vitest --ui --coverage"
+    "test": "vitest --ui --coverage",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "@astrojs/compiler": "^2.10.3",
@@ -85,6 +88,7 @@
     "simple-git-hooks": "^2.11.1",
     "tsup": "^8.3.5",
     "tsx": "^4.19.2",
+    "vitepress": "^1.5.0",
     "vitest": "^2.1.2"
   },
   "simple-git-hooks": {
