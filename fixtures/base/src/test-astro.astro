@@ -9,4 +9,5 @@ const { title }: Props = Astro.props;
 <div>
   <h1>Hello, Astro!</h1>
   <p>This is a test Astro component. {title}</p>
+  {Astro.slots.has("default") ? <slot name="default" /> : null}
 </div>
