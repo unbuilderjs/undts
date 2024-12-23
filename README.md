@@ -26,6 +26,10 @@ All special files can be disabled by options, just set like `vue: false`, `svelt
 
 > I will keep the configuration as simple as possible, just like tsup ⚡️
 
+## Full documentation
+
+Please see the [documentation](https://undts.naily.cc).
+
 ## Quick Start
 
 ```bash
@@ -133,17 +137,6 @@ export default defineConfig({
 })
 ```
 </details>
-
-## Plugin
-
-`undts`'s plugin system is extended from `rollup` and added some new hooks, you can use it to customize the behavior of `undts`.
-
-- `dtsConfig`: This hook is called when starting call `build` function, you can modify the `undts`'s configuration by this hook.
-- `transformInclude`: This hook is called when `undts` encounters a file that needs to be included in the cache bundle, you can use this hook to modify the file content before it is included in the cache bundle.
-- `transformCallExpression`: This hook is called when `undts` encounters a TypeScript `CallExpression` node, the main purpose of this hook is to convert the `import()` function.
-- `transformImportDeclaration/transformExportDeclaration`: These hooks are called when `undts` encounters a TypeScript `ImportDeclaration`/`ExportDeclaration` node, the main purpose of these hooks is to convert the `import`/`export` statement.
-- `transformSourceFile`: This hook is called when `undts` encounters a TypeScript `SourceFile` instance, this hook will be called after all of the above hooks have been called.
-- `writeCacheBundle`: This hook is called when `undts` writes the cache bundle to the disk, you can use this hook to modify the cache bundle before it is written to the disk. It enabled `bundled` option (default is enabled), the real cache bundle path will be delivered to `rollup`'s `input` option and transform by `rollup-plugin-dts` plugin.
 
 ## License & Author
 
